@@ -1,23 +1,19 @@
 import argparse
 import datetime
 import sys
+import logging
 from pathlib import Path
 import xml.etree.ElementTree as ET
-from testrail import *
-
-client = APIClient('')
-client.user = ''
-client.password = ''
+import client
 
 
 def parse_junit_xml(filename):
     """
     Parse a given junit xml file and return dict of testcases.
     param filename: junit xml file to be parsed
-    return: dict obj
+    return: list obj
     """
 
-    testcase_names = {}
     testcases = []
 
     tree = ET.parse(filename)
@@ -26,48 +22,32 @@ def parse_junit_xml(filename):
         if elem.tag == 'testcase':
             testcase_name = elem.attrib['name']
             testcases.append(testcase_name)
-
-    # dict of testcases
-    # testcase_names = {"testcases": ['testcase_one', 'testcase_two', 'testcase_three']}
-    # testcase_names['testcases'] = testcases
-    # return testcase_names
-
-
-    # list of testcases
     return testcases
 
-    # call to add each test in testcase list to testrail api
-    # for test in testcases:
-    #     add_testcase(testcase_name=test)
 
-
-# Client #
-
-def add_testcase(testcase_name):
+def add_testcases_to_testrail(testcases):
     """
-    Send POST request to testrail client to add an individual testcase
-    param testcase_name: str obj
-    return: POST response - dict obj
+    Given list of testcase names, sends POST request to testrail client, returns dict of newly added testcases
+    and their associated test_ids
+    param testcases: list of testcases
+    return: dict obj - testcases_added = {testcase_id: [testcase_name]}
     """
+    testcases_added = {}
 
-    # POC uses 1 section id
-    section_id = 1
-    request_body = {
-        "title": testcase_name,
-        "type_id": 1
-    }
-    resp = client.send_post('add_case/{}'.format(section_id), request_body)
-    return resp
+    for elem in testcases:
+        add_test = client.add_testcase(testcase_name=elem)
+        test_id = add_test['id']
+        test_name = add_test['title']
+        testcases_added[test_id] = [test_name]
+
+    return testcases_added
 
 
-def get_testcases():
+def check_for_existing_testcases():
     """
     """
-    # POC only 1 project suite
-    project_id = 1
-
-    resp = client.send_get('get_cases/{}'.format(project_id))
-    return resp
+    check = client.get_testcases()
+    return check
 
 
 if __name__ == "__main__":
@@ -90,16 +70,13 @@ if __name__ == "__main__":
 
     # parse for testcases
     run_cli = parse_junit_xml(filename=xml_input)
-    print("list of testcases from xml parsed {}".format(run_cli))
 
-    # testcase_dict = {}
+    # check for existing testcases
+    run_testcase_check = check_for_existing_testcases()
 
-    # loop add_testcase func
-    for test in run_cli:
-        add_test = add_testcase(testcase_name=test)
+    # add parsed testcases to testrail
+    add_tests = add_testcases_to_testrail(run_cli)
 
-    # grab testcases from api
-    new_testcases = get_testcases()
-    print("newly added testcase info {}".format(new_testcases))
+
 
 
