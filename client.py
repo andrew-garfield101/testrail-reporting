@@ -29,7 +29,9 @@ def add_testcase(testcase_name):
 def get_testcases():
     """
     """
-    # POC only 1 project suite
+    # 1 project id and suite id in POC
     project_id = config.project_id
     resp = client.send_get('get_cases/{}'.format(project_id))
-    return resp
+    cases = resp['cases']
+    existing_testcases = {elem['id']:elem['title'] for elem in cases}
+    return existing_testcases
