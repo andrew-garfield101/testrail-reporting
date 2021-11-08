@@ -71,30 +71,45 @@ def main():
         sys.exit(1)
 
     # 1
-    # parse xml for testcases
+    # parse xml for testcases - returns list of testcases
     run_cli = parse_junit_xml(filename=xml_input)
     # print("testcases found in xml file: {}".format(run_cli))
 
     # 2
-    # check for existing testcases in testrail project
+    # check for existing testcases in testrail project - returns dict of {testcase_id: 'testcase_name'}
     run_test_check = check_for_existing_testcases()
     # print("Existing testcases in Testrail POC: {}".format(run_test_check))
-    existing_tests = run_test_check
 
-    # 3
-    # add parsed testcases to testrail
-    add_tests = add_testcases_to_testrail(run_cli)
-    # print("newly added testcases to testrail: {}".format(add_tests))
-    new_tests = add_tests
+    # 3 compare new parsed tests with existing tests - return dict of shared testcase_names {id: 'testcase_name'}
+    new_tests = run_cli
+    existing_tests = run_test_check
+    # print("new_tests {}".format(new_tests))
+    # print("existing_tests {}".format(existing_tests))
+    pre_existing_tests = {}
+    tests_to_add = []
+    for elem in new_tests:
+        for k, v in existing_tests.items():
+            if elem == v:
+                pre_existing_tests[k] = [v]
+        else:
+            if elem != v:
+                tests_to_add.append(elem)
+
+
+    # return pre_existing_tests
+    print("these are the tests already exist in testrail {}".format(pre_existing_tests))
+    print("tests to add {}".format(tests_to_add))
 
     # 4
-    # test dict comparison
-    shared_tests = {}
-    for i in existing_tests:
-        if (i in new_tests) and (existing_tests[i] == new_tests[i]):
-            shared_tests[i] = existing_tests[i]
+    # add parsed testcases not in pre_existing_tests dict to testrail
+    # tests_to_add = {}
+    # for test in new_tests:
+    #     if test not in pre_existing_tests:
+    #         tests_to_add[test] = []
 
-    # print("these are the tests that exist already in testrail: {}".format(shared_tests))
+    # print("tests to add to testrail {}".format(tests_to_add))
+    # add_testcases_to_testrail(testcases=tests_to_add)
+
 
 
 if __name__ == "__main__":
