@@ -5,6 +5,7 @@ import logging
 from pathlib import Path
 import xml.etree.ElementTree as ET
 import client
+import requests
 
 
 def parse_junit_xml(filename):
@@ -37,7 +38,7 @@ def add_testcases_to_testrail(testcases):
     for elem in testcases:
         add_test = client.add_testcase(testcase_name=elem)
         test_id = add_test['id']
-        test_name = add_test['title']
+        test_name = add_test['name']
         testcases_added[test_id] = [test_name]
 
     return testcases_added
@@ -73,43 +74,37 @@ def main():
     # 1
     # parse xml for testcases - returns list of testcases
     run_cli = parse_junit_xml(filename=xml_input)
-    # print("testcases found in xml file: {}".format(run_cli))
 
     # 2
     # check for existing testcases in testrail project - returns dict of {testcase_id: 'testcase_name'}
     run_test_check = check_for_existing_testcases()
-    # print("Existing testcases in Testrail POC: {}".format(run_test_check))
+    print("THESE ARE TESTS IN TESTRAIL {}".format(run_test_check))
 
-    # 3 compare new parsed tests with existing tests - return dict of shared testcase_names {id: 'testcase_name'}
+    # 3
+    # compare new parsed tests with existing tests - if tests exist in testrail add testcase name and id to dict
+    # remove testcase name from list of new_tests to be added
+
     new_tests = run_cli
     existing_tests = run_test_check
-    # print("new_tests {}".format(new_tests))
-    # print("existing_tests {}".format(existing_tests))
     pre_existing_tests = {}
-    tests_to_add = []
+
     for elem in new_tests:
         for k, v in existing_tests.items():
             if elem == v:
                 pre_existing_tests[k] = [v]
-        else:
-            if elem != v:
-                tests_to_add.append(elem)
+                new_tests.remove(elem)
+    print("NEW TESTS TO ADD {}".format(new_tests))
 
+    # # 4
+    # # add parsed tests not in existing cases to testrail
+    if new_tests:
+        try:
+            add_testcases_to_testrail(testcases=new_tests)
+        except Exception as err:
+            logging.info("Unable to add test cases to Testrail: {}".format(err))
 
-    # return pre_existing_tests
-    print("these are the tests already exist in testrail {}".format(pre_existing_tests))
-    print("tests to add {}".format(tests_to_add))
-
-    # 4
-    # add parsed testcases not in pre_existing_tests dict to testrail
-    # tests_to_add = {}
-    # for test in new_tests:
-    #     if test not in pre_existing_tests:
-    #         tests_to_add[test] = []
-
-    # print("tests to add to testrail {}".format(tests_to_add))
-    # add_testcases_to_testrail(testcases=tests_to_add)
-
+    if not new_tests:
+        logging.info("No new tests to add")
 
 
 if __name__ == "__main__":
