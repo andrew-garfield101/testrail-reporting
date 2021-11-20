@@ -42,21 +42,22 @@ def main():
     if not xml_input.is_file():
         sys.stderr.write("junit xml is not valid, or is unable to be found: {}".format(xml_input))
         sys.exit(1)
-
+    # parse xml file
     run_cli = parse_junit_xml(filename=xml_input)
     new_tests = run_cli
-
+    # get existing tests in TR compare to new_tests list & remove existing testcases
     existing_tests = client.get_testcases()
-
     for test in new_tests:
         for k, v in existing_tests.items():
             if test == v:
                 new_tests.remove(test)
-
+    # add tests not in TR
     for test in new_tests:
         tests_added = client.add_testcase(test)
 
     return tests_added
+
+    # add results parse
 
 
 if __name__ == "__main__":

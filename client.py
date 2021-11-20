@@ -35,6 +35,3 @@ def add_testcase(testcase):
         return None
     resp_data = json.loads(resp.content)
     return resp_data
-
-
-
