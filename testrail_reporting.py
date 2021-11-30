@@ -22,6 +22,7 @@ def parse_junit_xml(filename):
         if elem.tag == 'testcase':
             testcase_name = elem.attrib['name']
             testcases.append(testcase_name)
+
     return testcases
 
 
@@ -45,19 +46,11 @@ def main():
     # parse xml file
     run_cli = parse_junit_xml(filename=xml_input)
     new_tests = run_cli
-    # get existing tests in TR compare to new_tests list & remove existing testcases
-    existing_tests = client.get_testcases()
-    for test in new_tests:
-        for k, v in existing_tests.items():
-            if test == v:
-                new_tests.remove(test)
-    # add tests not in TR
-    for test in new_tests:
-        tests_added = client.add_testcase(test)
 
-    return tests_added
+    for test in new_tests:
+        testcases = client.get_testcase(test)
 
-    # add results parse
+    return testcases
 
 
 if __name__ == "__main__":
