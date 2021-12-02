@@ -1,7 +1,8 @@
 # testrail-reporting
 ### Testrail Reporting CLI to publish new testcases to a Testrail instance.
 
-This tool is primarily setup as a POC, functionality is aimed at those specific aspects.
+POC for Testrail Reporting in EAF. CLI takes a valid junit xml file and sends test results to Testrail Instance specified
+in config. Functionality is aimed at specific aspects of POC. 
 
 ### Config
 Edit config file to reflect updated instance values:
