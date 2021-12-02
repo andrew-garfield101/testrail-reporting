@@ -19,3 +19,4 @@ To run the CLI:
 
     python ./testrail_reporting.py -i <test_result_example.xml>
 
+    Note: xml file needs to be in Project directory for POC
