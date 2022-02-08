@@ -6,5 +6,5 @@ testrail_user = ''
 testrail_password = ''
 
 micro_client = ''
-micro_proj_name = 'Test Dev'
+micro_proj_name = ''
 
