@@ -7,14 +7,15 @@ import os
 import random
 import string
 import platform
+import distro
 import testrail_config as config
 
 # default config for default test_plan
 right_now = datetime.datetime.today().strftime("%Y_%m_%d")
 test_plan_name = "test_plan_{}".format(right_now)
 # Test Dev project id and single test suite below
-project_id = int
-suite_id = int
+project_id = 11
+suite_id = 1081
 client = config.client
 
 # os mapping
@@ -203,7 +204,7 @@ def find_platform_info():
             logging.warning("This appears to be a version of MacOS with no defined testrail configurations, no "
                             "reporting will be done on testrail: MacOS {}".format(platform_mac_release))
     elif platform_name == "Linux":
-        dist_info = platform.linux_distribution()
+        dist_info = distro.linux_distribution()
         dist_name = dist_info[0]
         dist_release = 0
         for map_name in linux_distro_name_map:
