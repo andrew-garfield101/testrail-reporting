@@ -27,13 +27,16 @@ os_configs = ["Windows 11 x64", "Windows 11 x86",
               "Ubuntu 18.04 x64", "Ubuntu 20.04 x64",
               "MacOS Big Sur x64", "MacOS Catalina x64",
               "MacOS El Capitan x64", "MacOS High Sierra x64",
-              "MacOS Mojave x64", "MacOS Sierra x64"]
+              "MacOS Mojave x64", "MacOS Monterey x64", "MacOS Sierra x64"]
 
 # config_keywords / might not need ?
 config_keywords = ['windows', 'linux', 'debian', 'ubuntu', 'redhat', 'darwin', 'centos', 'rhel']
 
 # release & distro name maps from bts
 macOS_release_name_map = {
+    '12.0': 'Monterey',
+    '12.1': 'Monterey',
+    '12.2': 'Monterey',
     '11.2': 'Big Sur',
     '11.1': 'Big Sur',
     '11.0': 'Big Sur',
