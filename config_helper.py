@@ -55,11 +55,11 @@ linux_distro_name_map = {
 }
 
 
-def run_name_generator(size=8, chars=string.ascii_uppercase + string.digits):
-    """
-    Create simple random test run name for add_test_run() use
-    """
-    return ''.join(random.choice(chars) for _ in range(size))
+# def run_name_generator(size=8, chars=string.ascii_uppercase + string.digits):
+#     """
+#     Create simple random test run name for add_test_run() use
+#     """
+#     return ''.join(random.choice(chars) for _ in range(size))
 
 
 def config_os_type(config_name):
