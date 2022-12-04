@@ -14,8 +14,8 @@ import testrail_config as config
 right_now = datetime.datetime.today().strftime("%Y_%m_%d")
 test_plan_name = "test_plan_{}".format(right_now)
 # Test Dev project id and single test suite below
-project_id = 11
-suite_id = 1081
+project_id = int
+suite_id = int
 client = config.client
 
 # os mapping
@@ -118,7 +118,7 @@ def get_test_plan(plan_id):
 
 def add_test_plan(name, config_ids, testcase_ids=[]):
 
-    run_name = 'DCO Endpoints'
+    run_name = 'Test Run Example'
     entry_run = [{"name": run_name, "include_all": False, "case_ids": testcase_ids, "config_ids": [config_id]} for config_id in config_ids]
 
     entry_data = {
@@ -143,7 +143,7 @@ def add_test_run(run_name, testcase_ids):
     """
     Create new test run in Testrail using simple default values for POC purposes
     """
-    #  Test Dev project id = 11
+    #  Test Dev project id = int
     test_run_request = {
         "suite_id": suite_id,
         "name": run_name,
