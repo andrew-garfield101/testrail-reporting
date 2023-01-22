@@ -1,5 +1,5 @@
 # testrail-reporting
-### Testrail Reporting CLI to publish new testcases to a Testrail instance.
+### Testrail Reporting CLI
 
 POC for Testrail Reporting. CLI takes a valid junit xml file and sends test results to Testrail Instance specified
 in config. Functionality is aimed at specific aspects of POC. 
@@ -19,4 +19,4 @@ To run the CLI:
 
     python ./testrail_reporting.py -i <test_result_example.xml>
 
-    Note: xml file needs to be in Project directory for POC
+    Note: xml file needs to be in Project directory
